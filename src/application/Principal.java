@@ -8,17 +8,21 @@ public class Principal {
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
-
+		
+		// só descomentar isso se precisar fazer os tamanhos da tabela
+		// gerada serem digitados (espero q nn precise pq eu considero que ela
+		// é maior que 6 o tempo todo)
+		
 		// System.out.println("Digite os tamanhos da matriz: ");
 		// int h = sc.nextInt();
 		// int w = sc.nextInt();
+
+		// altura e largura da matriz que a prof pediu
 		int h = 4;
 		int w = 6;
 		boolean[][] a = new boolean[h][w];
 
 		TabelaVerdade tabela = new TabelaVerdade(a);
-
-		tabela.atribuicaoValoresTabela();
 
 		System.out.println("Digite uma expressão para ser calculada: ");
 		System.out.println("obs: coloque espaços entre os operadores");
@@ -26,9 +30,12 @@ public class Principal {
 		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~");
 		String string = sc.nextLine();
 
+		// separa a string a cada espaço e joga num vetor parametro
+		// dessa função
 		operacao(string.split(" "));
-		System.out.println("--- --- --- --- ---");
+		System.out.println("--- --- ---");
 
+		tabela.atribuicaoValoresTabela();
 		tabela.getTable();
 		tabela.condicional();
 		tabela.operadorE();
@@ -41,38 +48,65 @@ public class Principal {
 
 	private static void operacao(String[] op) {
 
+		if(op.length == 1) {
+			return;
+		}
+		
 		System.out.printf(" p | q | v \n");
 
+		// esse (for) serve pra passar por todos os valores da tabela verdade,
+		// eu usei os bits dos numeros pra ir um por um, no caso, 
+		// 0 é 00, 1 é 01, 2 é 10 e 3 é 11
 		for (int i = 0; i < 4; i++) {
+			// no caso o que esses fazem é verificar se tem um bit 1 na
+			// 1° ou 2° posição, e atribuem true ou false pras variaveis
+			// de acordo com o que é achado
 			boolean a = ((0b10 & i) != 0) ? true : false;
 			boolean b = ((0b01 & i) != 0) ? true : false;
+
+			// esse vetor vai servir de referencia pra fazer o
+			// calculo da operação digitada
 			Boolean[] bool = new Boolean[op.length];
-			
+
 			for (int x = 0; x < op.length; x++) {
-				
+				// ele vê o que o usuario digitou, se foi p, ele recebe a,
+				// se foi q, ele recebe b, e se foi um simbolo ou operador,
+				// ele recebe null
+
 				if (op[x].equals("p")) {
 					bool[x] = a;
 				} else {
-					
+
 					if (op[x].equals("q")) {
 						bool[x] = b;
 					} else {
-						
+
 						bool[x] = null;
 					}
 				}
 			}
+			// talvez dê pra juntar esses 2 for, TALVEZ
 			for (int x = 0; x < op.length; x++) {
 
 				if (bool[x] == null) {
+					// o for vai passando pelas posições do bool que a gnt viu
+					// ali em cima, e só para na hora de fazer um calculo
+					// (quando ele achar um null)
 					if (bool[x + 1] == null) {
+						// só passa por aqui se tiver um simbolo seguido do outro
+						// (isso acontece com negação), ele inverte o bit que 
+						// recebe a negação e puxa tudo (incluindo x) um pra
+						// frente (ele puxa a string[] op também pq ela é usada
+						// pra ver qual operação é pra fazer)
 						bool[x + 2] = !(bool[x + 2]) ? true : false;
-						//bool[x + 1] = bool[x];
 						bool[x] = bool[x - 1];
 						op[x + 1] = op[x];
 						x++;
 					}
 
+					// como todos os valores do bool são (true, false, null),
+					// só temos como saber se TEM OU NÃO um operador ali,
+					// pra ver QUAL pegamos da própria string
 					switch (op[x]) {
 
 					case ("^"):
@@ -91,18 +125,20 @@ public class Principal {
 						bool[x + 1] = !(bool[x + 1]) ? true : false;
 						break;
 
-					case ("1"):
-						break;
-					case ("0"):
-						break;
-
+					// se digitaram qualquer coisa menos o que era pra digitar,
+					// printa que ta errado
 					default:
 						System.out.println("Operador inválido");
 					}
 				}
 
 			}
-			System.out.printf(" %s | %s | %d\n", a ? 1 : 0, b ? 1 : 0, (bool[op.length - 1]) ? 1 : 0);
+			// no final de cada calculo, printa a, b, e o ultimo valor do vetor
+			// bool (no calculo o valor vai sendo carregado até a ultima posição)
+			System.out.printf(" %s | %s | %d\n", 
+					a ? 1 : 0, 
+					b ? 1 : 0, 
+					(bool[op.length - 1]) ? 1 : 0);
 		}
 	}
 

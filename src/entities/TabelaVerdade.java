@@ -13,36 +13,49 @@ public class TabelaVerdade {
 
 	public void atribuicaoValoresTabela() {
 		for (int i = 0; i < matriz.length; i++) {
+			
 			for (int j = 0; j < matriz[0].length - 4; j++) {
 				double valor = Math.random();
+				
 				if (valor > 0.5) {
 					matriz[i][j] = false;
 				} else {
 					matriz[i][j] = true;
 				}
+				
 			}
 		}
 	}
 
 	public void getTable() {
+		System.out.println("TABELA GERADA:");
+		System.out.printf("| p | q |\n");
 		for (int i = 0; i < matriz.length; i++) {
+
 			for (int j = 0; j < matriz[0].length - 4; j++) {
-				System.out.print(((matriz[i][j]) ? 1 : 0) + ", ");
+				System.out.printf("| %s ", (matriz[i][j]) ? 1 : 0);
 			}
-			System.out.println();
+			System.out.println("|");
+
 		}
+		System.out.println(" --- --- ---");
 	}
 
 	public void getTable(int x) {
+		System.out.printf("| p | q | v |\n");
 		for (int i = 0; i < matriz.length; i++) {
+			
 			for (int j = 0; j < matriz[0].length - 4; j++) {
-				System.out.print(((matriz[i][j]) ? 1 : 0) + ", ");
+				System.out.printf("| %s ", (matriz[i][j]) ? 1 : 0);
 			}
-			System.out.println(((matriz[i][x]) ? 1 : 0));
+			System.out.printf("| %s |\n", (matriz[i][x]) ? 1 : 0);
+			
 		}
+		System.out.println(" --- --- ---");
 	}
 
 	public void condicional() {
+		
 		for (int i = 0; i < matriz.length; i++) {
 			matriz[i][2] = (!matriz[i][0] | matriz[i][1]);
 		}
@@ -73,9 +86,5 @@ public class TabelaVerdade {
 		System.out.println("BICONDICIONAL: ");
 		getTable(5);
 	}
-	
-	/*
-	 * public void setTable(int a, int x, int y) { TabelaVerdade temp = new
-	 * TabelaVerdade(); }
-	 */
+
 }
