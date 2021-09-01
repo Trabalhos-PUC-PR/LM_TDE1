@@ -2,7 +2,7 @@ package application;
 
 import java.util.Scanner;
 
-//import entities.TabelaVerdade;
+import entities.TabelaVerdade;
 import util.OperacoesTabela;
 
 public class Principal {
@@ -15,8 +15,8 @@ public class Principal {
 		System.out.println("obs: coloque espaços entre os operadores");
 		System.out.println("[p, q] [operador] [p, q] ...");
 		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~");
-		System.out.println("(p^~(qv~q))<->p");
-		System.out.println("p<->~q");
+		//System.out.println("(p^~(qv~q))<->p");
+		//System.out.println("p<->~q");
 		String string = sc.nextLine();
 
 		// separa a string a cada espaço e joga num vetor parametro
@@ -35,7 +35,7 @@ public class Principal {
 
 		// altura e largura da matriz que a prof pediu
 		
-		/*
+		
 		int h = 4;
 		int w = 6;
 		boolean[][] a = new boolean[h][w];
