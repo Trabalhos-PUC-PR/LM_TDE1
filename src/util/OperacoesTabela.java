@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import Exceptions.OperationSizeException;
+import entities.Posicao;
 
 public class OperacoesTabela {
 
@@ -13,11 +14,10 @@ public class OperacoesTabela {
 		if (op.length == 1) {
 			throw new OperationSizeException("Operation too small to be calculated");
 		}
-		//só pra fazer commit
+
 		List<Character> opLista = new ArrayList<>();
 		List<Integer> priorList = new ArrayList<>();
-		
-		
+
 		for (char a : op) {
 			opLista.add(a);
 		}
@@ -60,49 +60,133 @@ public class OperacoesTabela {
 				break;
 			}
 		}
+
 		opLista = opLista.stream().filter(x -> x != ' ').collect(Collectors.toList());
 		System.out.println(opLista);
 		System.out.println(priorList);
 
 		while (priorList.size() > 1) {
 
-			int topPriority = 0;
-			int posTopPri = 0;
-			int posTopEnd = 0;
-			int posTopPriTemp = 0;
-			int posTopEndTemp = 0;
-			int pos = 0;
+			Posicao pos = posicaoPrioridade(priorList);
 
-			for (int a : priorList) {
-				if (a >= topPriority) {
-					// muda a prioridade de acordo com o valor achado
-					// se maior que o atual, mudar
-					topPriority = a;
-					posTopPri = pos;
-					//System.out.printf("topPriority: %d, topPos: %d, stopPos%d\n", topPriority, posTopPriority, posFinalPriority);
-				}
-				if (topPriority == 8 & a == 7 & posTopEnd == 0) {
-					// tenta achar o próximo fecha parenteses
-					// depois do abre parenteses
-					posTopEnd = posTopEndTemp;
-				} else {
-					posTopEndTemp++;
-				}
-				pos++;
+			if (pos.getFim() == 0) {
+				pos.setFim(priorList.size() - 1);
 			}
-			
-			System.out.printf("pos ini: [%d, %d] pos end: [%d, %d]", posTopPri, priorList.get(posTopPri), posTopEnd, priorList.get(posTopEnd));
-			
+
+			System.out.printf("pos ini: [%d, %d] pos end: [%d, %d]", pos.getInicio(), priorList.get(pos.getInicio()),
+					pos.getFim(), priorList.get(pos.getFim()));
 			System.out.println(priorList);
-			//System.out.printf("topPriority: %d, topPos: %d, stopPos%d\n", topPriority, posTopPriority, posFinalPriority);
-			
-			
-			
-			priorList.remove(priorList.size()-1);
+
+			List<Integer> prioridade = prioridade(priorList, pos);
+
+			if (prioridade.get(0) == 8) {
+				prioridade.remove(prioridade.size() - 1);
+				prioridade.remove(0);
+			}
+
+			while (prioridade.size() > 1) {
+				Posicao posInterna = posicaoPrioridade(prioridade);
+				prioridade = operacao(prioridade, posInterna.getInicio());
+			}
+			if (priorList.size() > 1) {
+				for (int i = pos.getFim() - 1; i >= pos.getInicio(); i--) {
+					priorList.remove(i);
+				}
+				priorList.set(pos.getInicio(), prioridade.get(0));
+			} else {
+				priorList.set(0, prioridade.get(0));
+			}
 		}
 
 		System.out.println(priorList);
 
+	}
+
+	public static List<Integer> operacao(List<Integer> lista, int a) {
+		switch (lista.get(a)) {
+		case (6):
+			lista.set(a, (lista.get(a + 1) == 1 ? 0 : 1));
+			lista.remove(a + 1);
+			break;
+		case (5):
+			boolean p1 = paraBoolean(lista.get(a - 1));
+			boolean q1 = paraBoolean(lista.get(a + 1));
+			lista.set(a - 1, (p1 & q1) ? 1 : 0);
+			lista.remove(a + 1);
+			lista.remove(a);
+			break;
+
+		case (4):
+			boolean p2 = paraBoolean(lista.get(a - 1));
+			boolean q2 = paraBoolean(lista.get(a + 1));
+			lista.set(a - 1, (p2 | q2) ? 1 : 0);
+			lista.remove(a + 1);
+			lista.remove(a);
+			break;
+
+		case (3):
+			boolean p3 = paraBoolean(lista.get(a - 1));
+			boolean q3 = paraBoolean(lista.get(a + 1));
+			lista.set(a - 1, (!p3 | q3) ? 1 : 0);
+			lista.remove(a + 1);
+			lista.remove(a);
+			break;
+
+		case (2):
+			boolean p4 = paraBoolean(lista.get(a - 1));
+			boolean q4 = paraBoolean(lista.get(a + 1));
+			lista.set(a - 1, ((p4 & q4) | (!p4 & !q4)) ? 1 : 0);
+			lista.remove(a + 1);
+			lista.remove(a);
+			break;
+		}
+		return lista;
+	}
+
+	public static boolean paraBoolean(int a) {
+		return ((0b1 & a) != 0) ? true : false;
+	}
+
+	public static Posicao posicaoPrioridade(List<Integer> lista) {
+		Integer topPriority = 0;
+		Integer posTopPri = 0;
+		int posTopEnd = 0;
+		int posTopEndTemp = 0;
+		int pos = 0;
+
+		for (int a : lista) {
+			if (a >= topPriority) {
+				// muda a prioridade de acordo com o valor achado
+				// se maior que o atual, mudar
+				topPriority = a;
+				posTopPri = pos;
+				// System.out.printf("topPriority: %d, topPos: %d, stopPos%d\n", topPriority,
+				// posTopPriority, posFinalPriority);
+			}
+			if (topPriority == 8 & a == 7 & posTopEnd == 0) {
+				// tenta achar o próximo fecha parenteses
+				// depois do abre parenteses
+				posTopEnd = posTopEndTemp;
+			} else {
+				posTopEndTemp++;
+			}
+			pos++;
+		}
+
+		// retorna onde abre e onde fecha parenteses
+		return new Posicao(posTopPri, posTopEnd);
+	}
+
+	public static List<Integer> prioridade(List<Integer> lista, Posicao p) {
+		List<Integer> listaMenor = new ArrayList<>();
+		if (lista.size() >= 4) {
+			for (int i = p.getInicio(); i <= p.getFim(); i++) {
+				listaMenor.add(lista.get(i));
+			}
+			return listaMenor;
+		} else {
+			return lista;
+		}
 	}
 
 	public static void leituraAntiga(String[] op) {

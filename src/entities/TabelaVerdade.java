@@ -23,7 +23,7 @@ public class TabelaVerdade {
 					matriz[i][j] = true;
 				}
 				
-			}//
+			}
 		}
 	}
 
