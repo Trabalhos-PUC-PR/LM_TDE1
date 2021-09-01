@@ -9,9 +9,9 @@ public class Principal {
 
 		Scanner sc = new Scanner(System.in);
 		
-		// só descomentar isso se precisar fazer os tamanhos da tabela
+		// sï¿½ descomentar isso se precisar fazer os tamanhos da tabela
 		// gerada serem digitados (espero q nn precise pq eu considero que ela
-		// é maior que 6 o tempo todo)
+		// ï¿½ maior que 6 o tempo todo)
 		
 		// System.out.println("Digite os tamanhos da matriz: ");
 		// int h = sc.nextInt();
@@ -24,14 +24,14 @@ public class Principal {
 
 		TabelaVerdade tabela = new TabelaVerdade(a);
 
-		System.out.println("Digite uma expressão para ser calculada: ");
-		System.out.println("obs: coloque espaços entre os operadores");
+		System.out.println("Digite uma expressï¿½o para ser calculada: ");
+		System.out.println("obs: coloque espaï¿½os entre os operadores");
 		System.out.println("[p, q] [operador] [p, q] ...");
 		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~");
 		String string = sc.nextLine();
 
-		// separa a string a cada espaço e joga num vetor parametro
-		// dessa função
+		// separa a string a cada espaï¿½o e joga num vetor parametro
+		// dessa funï¿½ï¿½o
 		operacao(string.split(" "));
 		System.out.println("--- --- ---");
 
@@ -52,24 +52,24 @@ public class Principal {
 			return;
 		}
 		
-		System.out.printf(" p | q | v \n");
+		System.out.printf(" p | q | V \n");
 
 		// esse (for) serve pra passar por todos os valores da tabela verdade,
 		// eu usei os bits dos numeros pra ir um por um, no caso, 
-		// 0 é 00, 1 é 01, 2 é 10 e 3 é 11
+		// 0 ï¿½ 00, 1 ï¿½ 01, 2 ï¿½ 10 e 3 ï¿½ 11
 		for (int i = 0; i < 4; i++) {
-			// no caso o que esses fazem é verificar se tem um bit 1 na
-			// 1° ou 2° posição, e atribuem true ou false pras variaveis
-			// de acordo com o que é achado
+			// no caso o que esses fazem ï¿½ verificar se tem um bit 1 na
+			// 1ï¿½ ou 2ï¿½ posiï¿½ï¿½o, e atribuem true ou false pras variaveis
+			// de acordo com o que ï¿½ achado
 			boolean a = ((0b10 & i) != 0) ? true : false;
 			boolean b = ((0b01 & i) != 0) ? true : false;
 
 			// esse vetor vai servir de referencia pra fazer o
-			// calculo da operação digitada
+			// calculo da operaï¿½ï¿½o digitada
 			Boolean[] bool = new Boolean[op.length];
 
 			for (int x = 0; x < op.length; x++) {
-				// ele vê o que o usuario digitou, se foi p, ele recebe a,
+				// ele vï¿½ o que o usuario digitou, se foi p, ele recebe a,
 				// se foi q, ele recebe b, e se foi um simbolo ou operador,
 				// ele recebe null
 
@@ -85,28 +85,28 @@ public class Principal {
 					}
 				}
 			}
-			// talvez dê pra juntar esses 2 for, TALVEZ
+			// talvez dï¿½ pra juntar esses 2 for, TALVEZ
 			for (int x = 0; x < op.length; x++) {
 
 				if (bool[x] == null) {
-					// o for vai passando pelas posições do bool que a gnt viu
-					// ali em cima, e só para na hora de fazer um calculo
+					// o for vai passando pelas posiï¿½ï¿½es do bool que a gnt viu
+					// ali em cima, e sï¿½ para na hora de fazer um calculo
 					// (quando ele achar um null)
 					if (bool[x + 1] == null) {
-						// só passa por aqui se tiver um simbolo seguido do outro
-						// (isso acontece com negação), ele inverte o bit que 
-						// recebe a negação e puxa tudo (incluindo x) um pra
-						// frente (ele puxa a string[] op também pq ela é usada
-						// pra ver qual operação é pra fazer)
+						// sï¿½ passa por aqui se tiver um simbolo seguido do outro
+						// (isso acontece com negaï¿½ï¿½o), ele inverte o bit que 
+						// recebe a negaï¿½ï¿½o e puxa tudo (incluindo x) um pra
+						// frente (ele puxa a string[] op tambï¿½m pq ela ï¿½ usada
+						// pra ver qual operaï¿½ï¿½o ï¿½ pra fazer)
 						bool[x + 2] = !(bool[x + 2]) ? true : false;
 						bool[x] = bool[x - 1];
 						op[x + 1] = op[x];
 						x++;
 					}
 
-					// como todos os valores do bool são (true, false, null),
-					// só temos como saber se TEM OU NÃO um operador ali,
-					// pra ver QUAL pegamos da própria string
+					// como todos os valores do bool sï¿½o (true, false, null),
+					// sï¿½ temos como saber se TEM OU Nï¿½O um operador ali,
+					// pra ver QUAL pegamos da prï¿½pria string
 					switch (op[x]) {
 
 					case ("^"):
@@ -128,13 +128,13 @@ public class Principal {
 					// se digitaram qualquer coisa menos o que era pra digitar,
 					// printa que ta errado
 					default:
-						System.out.println("Operador inválido");
+						System.out.println("Operador invï¿½lido");
 					}
 				}
 
 			}
 			// no final de cada calculo, printa a, b, e o ultimo valor do vetor
-			// bool (no calculo o valor vai sendo carregado até a ultima posição)
+			// bool (no calculo o valor vai sendo carregado atï¿½ a ultima posiï¿½ï¿½o)
 			System.out.printf(" %s | %s | %d\n", 
 					a ? 1 : 0, 
 					b ? 1 : 0, 

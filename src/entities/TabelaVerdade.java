@@ -42,7 +42,7 @@ public class TabelaVerdade {
 	}
 
 	public void getTable(int x) {
-		System.out.printf("| p | q | v |\n");
+		System.out.printf("| p | q | V |\n");
 		for (int i = 0; i < matriz.length; i++) {
 			
 			for (int j = 0; j < matriz[0].length - 4; j++) {
