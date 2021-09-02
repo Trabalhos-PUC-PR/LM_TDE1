@@ -1,5 +1,6 @@
 package util;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +9,23 @@ import Exceptions.OperationSizeException;
 import entities.Posicao;
 
 public class OperacoesTabela {
-
+	/*
+	 * Vou fazer um geralzao aqui, minha ideia de como fazer isso funcionar foi 
+	 * o seguinte:
+	 * eu precisava receber a string (a formula p ser calculada) e de alguma
+	 * forma saber aonde devo começar os calculos (parenteses, ordem de prioridade)
+	 * 
+	 * minha ideia foi: pra cada operador, um peso e atribuido ("()" sao os valores mais altos,
+	 * negacao e o segundo mais alto, e por ai vai), pra ficar mais facil de analizar a operacao
+	 * 
+	 * depois de gerar uma lista com representacoes numericas da operacao, eu analiso se tem
+	 * parenteses, e caso algum seja achado, a posicao do parenteses que abre e do que fecha
+	 * e guardada, dentro do parenteses eu pego o maior valor e calculo ele, ate sobrar
+	 * o resultado final. ele e inserido no lugar que o parenteses ficava e o ciclo se
+	 * repete ate chegar no resultado final
+	 * 
+	 * 
+	 */
 	public static void ordemPrioridade(char[] op) {
 
 		if (op.length == 1) {
@@ -77,6 +94,12 @@ public class OperacoesTabela {
 					pos.setFim(priorList.size() - 1);
 				}
 
+				
+				/*//descomentar pra ver oq ta acontecendo mais ou menos
+				System.out.printf("pos ini: [%d, %d] pos end: [%d, %d]", pos.getInicio(), priorList.get(pos.getInicio()),
+						pos.getFim(), priorList.get(pos.getFim()));
+				System.out.println(priorList);
+				//*/
 				List<Integer> prioridade = prioridade(priorList, pos);
 
 				if (prioridade.get(0) == 8) {
@@ -142,6 +165,10 @@ public class OperacoesTabela {
 			lista.remove(a + 1);
 			lista.remove(a);
 			break;
+			
+		case (0):
+		case (1):
+			throw new InvalidParameterException("Loop infinito :/");
 		}
 		return lista;
 	}
@@ -154,7 +181,7 @@ public class OperacoesTabela {
 		Integer topPriority = 0;
 		Integer posTopPri = 0;
 		int posTopEnd = 0;
-		int posTopEndTemp = 0;
+		//int posTopEndTemp = 0;
 		int pos = 0;
 
 		for (int a : lista) {
@@ -162,25 +189,28 @@ public class OperacoesTabela {
 				// muda a prioridade de acordo com o valor achado
 				// se maior que o atual, mudar
 				topPriority = a;
+				posTopEnd = 0;
 				posTopPri = pos;
 			}
-			if (topPriority == 8 & a == 7 & posTopEnd == 0) {
+			if (a == 7 && posTopEnd == 0) {
 				// tenta achar o próximo fecha parenteses
 				// depois do abre parenteses
-				posTopEnd = posTopEndTemp;
+				posTopEnd = pos;
 			} else {
-				posTopEndTemp++;
+				//posTopEndTemp++;
 			}
 			pos++;
 		}
-
+		
+		
+		
 		// retorna onde abre e onde fecha parenteses
 		return new Posicao(posTopPri, posTopEnd);
 	}
 
 	public static List<Integer> prioridade(List<Integer> lista, Posicao p) {
 		List<Integer> listaMenor = new ArrayList<>();
-		if (lista.size() >= 4) {
+		if (lista.size() > 4 && lista.get(p.getInicio())!=5 && lista.get(p.getInicio())!=4) {
 			for (int i = p.getInicio(); i <= p.getFim(); i++) {
 				listaMenor.add(lista.get(i));
 			}

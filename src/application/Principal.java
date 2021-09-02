@@ -12,11 +12,12 @@ public class Principal {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.println("Digite uma expressão para ser calculada: ");
-		System.out.println("obs: coloque espaços entre os operadores");
-		System.out.println("[p, q] [operador] [p, q] ...");
-		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~");
-		//System.out.println("(p^~(qv~q))<->p");
-		//System.out.println("p<->~q");
+		System.out.println("[p, q][operador][p, q] ...");
+		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~, (, )");
+		// (p^~(qv~q))<->p
+		// p<->~q
+		// (pv~q)<->(p->(~q^p))
+		// p ^ q -> (pv~(pv~q)^p)
 		String string = sc.nextLine();
 
 		// separa a string a cada espaço e joga num vetor parametro
