@@ -1,11 +1,9 @@
 package util;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import Exceptions.OperationSizeException;
+import Exceptions.OperationException;
 import entities.Posicao;
 
 public class OperacoesTabela {
@@ -29,7 +27,7 @@ public class OperacoesTabela {
 	public static void ordemPrioridade(char[] op) {
 
 		if (op.length == 1) {
-			throw new OperationSizeException("Operation too small to be calculated");
+			throw new OperationException("Operation too small to be calculated");
 		}
 
 		System.out.printf("\nTABELA VERDADE \nCALCULADA: " + "\n| p | q | v |\n");
@@ -168,7 +166,7 @@ public class OperacoesTabela {
 			
 		case (0):
 		case (1):
-			throw new InvalidParameterException("Loop infinito :/");
+			throw new OperationException("Loop infinito :/");
 		}
 		return lista;
 	}
