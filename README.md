@@ -1,4 +1,9 @@
 # LM_TDE1
 TDE 1 de Lógica Matemática
 
-#### Agora implementada ordem de prioridade para o calculo das operações fornecidas pelo usuário!!!
+#### TDE de Lógica matemática
+Grupo:
+- André Kovalski
+- Daniel Nowak
+- Danilo Alecrim
+- Leonardo Ikeda
