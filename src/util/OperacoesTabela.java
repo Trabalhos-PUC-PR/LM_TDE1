@@ -33,7 +33,10 @@ public class OperacoesTabela {
 			throw new OperationException("Operation too small to be calculated");
 		}
 
-		System.out.printf("\nTABELA VERDADE \nCALCULADA: " + "\n| p | q | v |\n");
+		boolean print = false;
+		boolean p = false;
+		boolean q = false;
+
 		for (int h = 0; h < 4; h++) {
 
 			/*
@@ -85,9 +88,11 @@ public class OperacoesTabela {
 					break;
 				case ('p'):
 					priorList.add(valor1); // a
+					p = true;
 					break;
 				case ('q'):
 					priorList.add(valor2); // b
+					q = true;
 					break;
 				default:
 					break;
@@ -115,19 +120,21 @@ public class OperacoesTabela {
 				}
 
 				/*
-				//descomentar pra ver oq ta acontecendo mais ou menos
-				System.out.printf("pos ini: [%d, %d] pos end: [%d, %d]", pos.getInicio(),
-				priorList.get(pos.getInicio()), pos.getFim(), priorList.get(pos.getFim()));
-				System.out.println(priorList); //
-				*/
-				
-				/* essa lista é especificamente o que ta dentro dos parenteses OU o resto
-				 * das prioridades
+				 * //descomentar pra ver oq ta acontecendo mais ou menos
+				 * System.out.printf("pos ini: [%d, %d] pos end: [%d, %d]", pos.getInicio(),
+				 * priorList.get(pos.getInicio()), pos.getFim(), priorList.get(pos.getFim()));
+				 * System.out.println(priorList); //
+				 */
+
+				/*
+				 * essa lista é especificamente o que ta dentro dos parenteses OU o resto das
+				 * prioridades
 				 */
 				List<Integer> prioridade = prioridade(priorList, pos);
 
-				/* se ele começa com parenteses, ele remove o fecha-parenteses e
-				 * o abre-parenteses, só pra nao dar trabalho depois
+				/*
+				 * se ele começa com parenteses, ele remove o fecha-parenteses e o
+				 * abre-parenteses, só pra nao dar trabalho depois
 				 */
 				if (prioridade.get(0) == 8) {
 					prioridade.remove(prioridade.size() - 1);
@@ -137,18 +144,18 @@ public class OperacoesTabela {
 				// agora o programa vai resolver o que ta dentro do parenteses (ou
 				// a prioridade) e só vai parar quando tiver a resposta final
 				while (prioridade.size() > 1) {
-					
+
 					// pega qual é a prioridade DENTRO do parenteses, serve pra fazer
 					// na ordem certa a negação, E, OU, cond e BICOND
 					Posicao posInterna = posicaoPrioridade(prioridade);
-					
-					// a função operacao serve pra calcular coisa. 
+
+					// a função operacao serve pra calcular coisa.
 					prioridade = operacao(prioridade, posInterna.getInicio());
 				}
-				
+
 				// se a lista de prioridade (aquela com todos os valores numericos)
 				// for maior que um, então o programa substitui tudo que tinha no
-				// parenteses pro resultado final da operação 
+				// parenteses pro resultado final da operação
 				if (priorList.size() > 1) {
 					for (int i = pos.getFim() - 1; i >= pos.getInicio(); i--) {
 						priorList.remove(i);
@@ -160,18 +167,39 @@ public class OperacoesTabela {
 					priorList.set(0, prioridade.get(0));
 				}
 			}
-			
+
 			// saindo do while que só para quando a lista de valores numéricos é igual 1,
 			// o resultado final E os valores de P e Q são impressos na tela
-			System.out.printf("| %s | %s | %s |\n", (valor1 == 1) ? "V" : "F", (valor2 == 1) ? "V" : "F",
-					(priorList.get(0) == 1) ? "V" : "F");
+			
+			// essa parte pra impressão ficou horrivel, ta cheio de if else
+			if (p && q == true) {
+				if (print == false) {
+					System.out.printf("\nTABELA VERDADE \nCALCULADA: " + "\n| p | q | v |\n");
+				}
+				System.out.printf("| %s | %s | %s |\n", (valor1 == 1) ? "V" : "F", (valor2 == 1) ? "V" : "F",
+						(priorList.get(0) == 1) ? "V" : "F");
+
+			}
+			if (p == true && q == false) {
+				if (print == false) {
+					System.out.printf("\nTABELA VERDADE \nCALCULADA: " + "\n| p | v |\n");
+				}
+				System.out.printf("| %s | %s |\n", (valor1 == 1) ? "V" : "F", (priorList.get(0) == 1) ? "V" : "F");
+			} else if (q == true && p == false) {
+				if (print == false) {
+					System.out.printf("\nTABELA VERDADE \nCALCULADA: " + "\n| q | v |\n");
+				}
+				System.out.printf("| %s | %s |\n", (valor2 == 1) ? "V" : "F", (priorList.get(0) == 1) ? "V" : "F");
+			}
+			print = true;
+
 		}
 	}
 
 	public static List<Integer> operacao(List<Integer> lista, int a) {
 		/*
-		 * basicamente essa funcao recebe uma lista de operações e uma posição
-		 * ele SÓ calcula o operador da posição inserida
+		 * basicamente essa funcao recebe uma lista de operações e uma posição ele SÓ
+		 * calcula o operador da posição inserida
 		 */
 		switch (lista.get(a)) {
 		// negação
@@ -219,7 +247,7 @@ public class OperacoesTabela {
 		}
 		return lista;
 	}
-	
+
 	// converte 1 para true e 0 para false (facilita o calculo na operacao)
 	public static boolean paraBoolean(int a) {
 		return ((0b1 & a) != 0) ? true : false;
@@ -239,7 +267,7 @@ public class OperacoesTabela {
 		 * vai começar pelo parenteses, e só depois que todos forem // calculados que
 		 * ele começa a pegar a ordem normal (E ou OU, negação etc)
 		 */
-		
+
 		// para cada elemento a na lista
 		for (int a : lista) {
 
@@ -263,7 +291,7 @@ public class OperacoesTabela {
 	}
 
 	public static List<Integer> prioridade(List<Integer> lista, Posicao p) {
-		// destaca uma lista menor, que ta dentro do parenteses (ele ignora também 
+		// destaca uma lista menor, que ta dentro do parenteses (ele ignora também
 		// quando a lista começa com ^ ou v (começaria com operador quando eles são
 		// os maiores valores numéricos que sobraram) se não ignorar operador no inicio,
 		// o programa buga)
