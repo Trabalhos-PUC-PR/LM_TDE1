@@ -1,9 +1,16 @@
 package application;
 
 import java.util.Scanner;
-
 import entities.TabelaVerdade;
 import util.OperacoesTabela;
+
+/*
+Grupo:
+AndrÃ© Luiz Kovalski
+Daniel Nowak
+Danilo Alecrim
+Leonardo Ikeda
+*/
 
 public class Principal {
 
@@ -11,24 +18,20 @@ public class Principal {
 
 		Scanner sc = new Scanner(System.in);
 
-		System.out.println("Digite uma expressão para ser calculada: ");
+		System.out.println("Digite uma expressao para ser calculada: ");
 		System.out.println("[p, q][operador][p, q] ...");
 		System.out.println("Operadores disponiveis: ^, v, ->, <->, ~, (, )");
-		// (p^~(qv~q))<->p
-		// p<->~q
-		// (pv~q)<->(p->(~q^p))
-		// p ^ q -> (pv~(pv~q)^p)
 		String string = sc.nextLine();
 
-		// separa a string a cada espaço e joga num vetor parametro
-		// dessa função
+		// separa a string a cada espaÃ§o e joga num vetor parametro
+		// dessa funÃ§Ã£o
 		//OperacoesTabela.leituraAntiga(string.split(" "));
 		OperacoesTabela.ordemPrioridade(string.toCharArray());
 		System.out.println("--- --- ---");
 
-		// só descomentar isso se precisar fazer os tamanhos da tabela
+		// sÃ³ descomentar isso se precisar fazer os tamanhos da tabela
 		// gerada serem digitados (espero q nn precise pq eu considero que ela
-		// é maior que 6 o tempo todo)
+		// Ã© maior que 6 o tempo todo)
 		
 		// System.out.println("Digite os tamanhos da matriz: ");
 		// int h = sc.nextInt();
